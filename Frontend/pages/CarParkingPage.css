@@ -1,0 +1,62 @@
+.car-parking-container {
+  padding: 20px;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.slot {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.slot.occupied {
+  background-color: #f44336;
+  color: white;
+}
+
+.slot.available {
+  background-color: #4caf50;
+  color: white;
+}
+/* ----------------------------------*/
+.parking-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.floor {
+  margin-bottom: 20px;
+}
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.slot {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+}
+
+.slot.free {
+  background-color: green;
+}
+
+.slot.occupied {
+  background-color: red;
+}

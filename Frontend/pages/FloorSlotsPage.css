@@ -1,0 +1,168 @@
+.floor-slots-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+}
+
+.slot-card {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 16px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.slot-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.slot-card:hover::before {
+  opacity: 1;
+}
+
+.slot-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.slot-card.available {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  border: 2px solid #66BB6A;
+}
+
+.slot-card.available:hover {
+  background: linear-gradient(135deg, #66BB6A, #4CAF50);
+}
+
+.slot-card.occupied {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  border: 2px solid #EF5350;
+}
+
+.slot-card.occupied:hover {
+  background: linear-gradient(135deg, #EF5350, #f44336);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slot-icon {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.slot-card h3 {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.slot-status {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.status-text {
+  display: block;
+  font-weight: bold;
+}
+
+.vehicle-info {
+  display: block;
+  font-size: 0.7rem;
+  margin-top: 2px;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+  }
+
+  .slot-card {
+    width: 100px;
+    height: 100px;
+  }
+
+  .slot-icon {
+    font-size: 1.5rem;
+  }
+
+  .slot-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .slot-status {
+    font-size: 0.7rem;
+  }
+
+  .vehicle-info {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .floor-slots-container {
+    padding: 10px;
+  }
+
+  .slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .slot-card {
+    width: 80px;
+    height: 80px;
+  }
+
+  .slot-icon {
+    font-size: 1.2rem;
+  }
+
+  .slot-card h3 {
+    font-size: 0.8rem;
+  }
+
+  .slot-status {
+    font-size: 0.6rem;
+  }
+
+  .vehicle-info {
+    font-size: 0.5rem;
+  }
+}

@@ -1,0 +1,171 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import "./ExitVehiclePages.css";
+
+function ExitVehiclePage() {
+  const token = useSelector((state) => state.auth.token);
+
+  const [number, setNumber] = useState("");
+  const [vehicle, setVehicle] = useState(null);
+  const [amount, setAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [error, setError] = useState("");
+
+  const fetchVehicle = async () => {
+    if (!number.trim()) {
+      setError("Please enter a vehicle number");
+      return;
+    }
+
+    setSearching(true);
+    setError("");
+    setVehicle(null);
+    setAmount(0);
+
+    try {
+      const res = await axios.get(`/api/vehicle/number/${number}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const v = res.data;
+      setVehicle(v);
+
+      const entryTime = new Date(v.entryTime);
+      const now = new Date();
+
+      const diffHours = Math.ceil((now - entryTime) / (1000 * 60 * 60));
+
+      const rate = v.type === "car" ? 50 : 20;
+      setAmount(diffHours * rate);
+
+    } catch (err) {
+      setError("Vehicle not found! Please check the number and try again.");
+      console.error(err);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  const handleExit = async () => {
+    setLoading(true);
+    try {
+      await axios.post(
+        "/api/vehicle/unpark",
+        { vehicleId: vehicle._id, amount },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      alert("Vehicle exited successfully!");
+      setVehicle(null);
+      setNumber("");
+      setAmount(0);
+      setError("");
+    } catch (err) {
+      setError("Failed to exit vehicle. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      fetchVehicle();
+    }
+  };
+
+  return (
+    <div className="exit-container">
+      <div className="exit-header">
+        <h1>Vehicle Exit</h1>
+        <p className="exit-subtitle">Process vehicle departure and calculate parking fees</p>
+      </div>
+
+      <div className="exit-section">
+        <div className="exit-form">
+          <div className="form-group">
+            <label className="form-label">Vehicle Number</label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Enter vehicle number (e.g., ABC-123)"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+          </div>
+
+          <button
+            className="btn btn-primary"
+            onClick={fetchVehicle}
+            disabled={searching}
+          >
+            {searching ? "Searching..." : "Search Vehicle"}
+          </button>
+
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {vehicle && (
+        <div className="exit-section">
+          <div className="exit-details-card">
+            <h3>Parking Details</h3>
+
+            <div className="details-grid">
+              <div className="detail-item">
+                <span className="detail-label">Vehicle Number</span>
+                <span className="detail-value">{vehicle.number}</span>
+              </div>
+
+              <div className="detail-item">
+                <span className="detail-label">Vehicle Type</span>
+                <span className="detail-value">{vehicle.type}</span>
+              </div>
+
+              <div className="detail-item">
+                <span className="detail-label">Parking Slot</span>
+                <span className="detail-value">{vehicle.slot.number}</span>
+              </div>
+
+              <div className="detail-item">
+                <span className="detail-label">Entry Time</span>
+                <span className="detail-value">{new Date(vehicle.entryTime).toLocaleString()}</span>
+              </div>
+
+              <div className="detail-item">
+                <span className="detail-label">Duration</span>
+                <span className="detail-value">
+                  {Math.ceil((new Date() - new Date(vehicle.entryTime)) / (1000 * 60 * 60))} hours
+                </span>
+              </div>
+
+              <div className="detail-item total-amount">
+                <span className="detail-label">Total Amount</span>
+                <span className="detail-value amount-highlight">₹{amount}</span>
+              </div>
+            </div>
+
+            <button
+              className="btn btn-success exit-btn"
+              onClick={handleExit}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Confirm Exit & Payment"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default ExitVehiclePage;

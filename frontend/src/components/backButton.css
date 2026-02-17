@@ -1,0 +1,46 @@
+#back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 14px;
+    background-color: #ffffff;
+    border: 2px solid #007bff;
+    border-radius: 30px;
+
+    color: #007bff;
+    font-size: 15px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: 
+        background-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.15s ease,
+        box-shadow 0.25s ease;
+}
+
+/* Icon size */
+.back-icon {
+    font-size: 16px;
+}
+
+/* Hover */
+#back-button:hover {
+    background-color: #007bff;
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Click */
+#back-button:active {
+    transform: scale(0.96);
+    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.25);
+}
+
+/* Keyboard focus */
+#back-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
